@@ -16,9 +16,16 @@ class Book(models.Model):
     def __str__(self):
         return "{} by {}".format(self.title, self.list_authors)
 
-    def authors_list(self):
+    def list_authors(self):
         return ", ".join([author.name for author in self.authors.all()])
 
+    #We can over write the save
+    def save(self, *args, **kwargs):
+        if (self.review and self.date_reviewed is None):
+            self.date_reviewed = now()
+
+        super(Book, self).save(*args, **kwargs)  # this is needed, other wise it
+        #it wont save
 
 class Author(models.Model):
     name = models.CharField(max_length=70, help_text="Use pen name, not real name",
