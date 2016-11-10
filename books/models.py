@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -13,7 +14,10 @@ class Book(models.Model):
     is_favourite = models.BooleanField(default=False, verbose_name="Favorite?") #we can have default
                                                       #values in our model fiel
     def __str__(self):
-        return self.title
+        return "{} by {}".format(self.title, self.list_authors)
+
+    def authors_list(self):
+        return ", ".join([author.name for author in self.authors.all()])
 
 
 class Author(models.Model):
