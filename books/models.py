@@ -21,7 +21,7 @@ class Book(models.Model):
 			self.date_reviewed = now()
 
 		super(Book, self).save(*args, **kwargs)
-
+        
 
 class Author(models.Model):
 	name = models.CharField(max_length=70, help_text="Use pen name, not real name",
