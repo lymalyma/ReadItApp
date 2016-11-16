@@ -58,8 +58,8 @@ ROOT_URLCONF = 'readit.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'readit', 'templates')], # specifying templates in other folders.
+        'APP_DIRS': True,                                        # templates outside an app.
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -122,3 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+#this is to register the new folder in readit > static, to load static files
+
+STATICFILES_DIRS = (
+	os.path.join(BASE_DIR, 'readit', 'static'),
+)

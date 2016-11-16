@@ -1,22 +1,14 @@
-<html>
-<head>
-  <title>An authork</title>
-</head>
+{% extends "base.html" %}
 
-<body>
-
-  {{ author.name }}
-  {% for books in authors.book.all %}
-  {% if book.review %}
-    <div class="book">
-      <h3>{{ book.title }}</h3>
-      {% if book.is_favourite %} <p class="highlight">favourite</p> {% endif %}
-      <p> {{ book.review|linebreaks }}</p>
-    </div>
-  {% endif %}
-  {% endfor %}
-
-</body>
-
-
-</html>
+{% block content %}
+	<h2>{{ author.name }}</h2>
+	{% for book in author.books.all %}
+		{% if book.review %}
+			<div class="book">
+				<h3><a href="{% url 'book-detail' book.pk %}">{{ book.title }}</a></h3>
+				{% if book.is_favourite %}<p class="highlight">favourite</p>{% endif %}
+				<p>{{ book.review|linebreaks }}</p>
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endblock %}
