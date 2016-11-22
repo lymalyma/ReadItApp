@@ -1,5 +1,5 @@
 from django.db.models import Count
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, DetailView
 from .forms import ReviewForm
 # from django.http import HttpResponse # we can remove it cause we dont use it now.
@@ -49,11 +49,9 @@ def review_books(request):
 	List all of the books that we want to review.
 	"""
 	books = Book.objects.filter(date_reviewed__isnull=True).prefetch_related('authors')
-	form = ReviewForm
 
 	context = {
 		'books': books,
-		'form': form,
 	}
 
 	return render(request, "list-to-review.html", context)
@@ -65,8 +63,24 @@ def review_book(request, pk):
 	"""
 	book = get_object_or_404(Book, pk=pk)
 
+	if request.method == "POST":
+		form = ReviewForm(request.POST)
+		if form.is_valid(): #this is a django built-in method for the form
+			book.is_favourite = form.cleaned_data['is_favourite']
+			book.review = forms.cleaned_data['review']
+			book.save()
+
+			return redirect('review_books')
+
+		#Process the form
+	else:
+		# render empty form.
+		form = ReviewForm
+
+
 	context = {
 		'book': book,
+		'form': form,
 	}
 
 	return render(request, "review-book.html", context)
